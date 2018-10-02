@@ -16,5 +16,9 @@ runtest(){
 runtest "0" 0
 runtest "1" 1
 runtest "42" 42
+runtest "1+42" 43
+runtest "23+42" 65
+runtest "1+2+4" 7
+runtest "1+2+4+10" 17
 
 echo "ok"
