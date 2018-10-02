@@ -14,5 +14,7 @@ runtest(){
 }
 
 runtest "0" 0
+runtest "1" 1
+runtest "42" 42
 
 echo "ok"
