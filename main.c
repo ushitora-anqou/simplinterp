@@ -4,6 +4,7 @@
 
 static char *p;
 static char *funcbuf[256];
+static int *varbuf;
 
 _Noreturn void error(char *msg)
 {
@@ -29,6 +30,12 @@ int parse_integer()
     return ival;
 }
 
+int parse_variable()
+{
+    if ('a' <= *p && *p <= 'z') return varbuf[(int)*p++];
+    return parse_integer();
+}
+
 int parse_funccall()
 {
     if (*p == 'P') {
@@ -44,15 +51,35 @@ int parse_funccall()
         int name = *p;
         p++;
         expect('(');
+
+        int varname = 'a', tmpbuf[256];
+        for (int i = 0; i < 256; i++) tmpbuf[i] = 0;
+        while (*p != ')') {
+            tmpbuf[varname++] = parse_add();
+            switch (*p) {
+                case ',':
+                    p++;
+                    break;
+                case ')':
+                    break;
+                default:
+                    error("unexpected character");
+            }
+        }
+
         expect(')');
+
         char *old_p = p;
+        int *old_varbuf = varbuf;
         p = funcbuf[name];
+        varbuf = tmpbuf;
         int ival = parse_exprs();
         p = old_p;
+        varbuf = old_varbuf;
         return ival;
     }
 
-    return parse_integer();
+    return parse_variable();
 }
 
 int parse_mul()
