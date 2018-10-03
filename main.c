@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 static char *p;
+static char *funcbuf[256];
 
 _Noreturn void error(char *msg)
 {
@@ -16,6 +17,7 @@ void expect(char ch)
 }
 
 int parse_add();
+int parse_exprs();
 
 int parse_integer()
 {
@@ -36,6 +38,18 @@ int parse_funccall()
         expect(')');
         printf("%d\n", ival);
         return 0;
+    }
+
+    if ('A' <= *p && *p <= 'Z') {
+        int name = *p;
+        p++;
+        expect('(');
+        expect(')');
+        char *old_p = p;
+        p = funcbuf[name];
+        int ival = parse_exprs();
+        p = old_p;
+        return ival;
     }
 
     return parse_integer();
@@ -79,7 +93,16 @@ int parse_add()
     return ival;
 }
 
-int eval()
+void parse_funcdef()
+{
+    int n = *p++;
+    expect('{');
+    funcbuf[n] = p;
+    while (*p != '\0' && *p++ != '}')
+        ;
+}
+
+int parse_exprs()
 {
     int ival = parse_add();
     while (*p == ';') {
@@ -87,6 +110,18 @@ int eval()
         ival = parse_add();
     }
     return ival;
+}
+
+int eval()
+{
+    while (1) {
+        if ('A' <= *p && *p <= 'Z' && *(p + 1) == '{') {
+            parse_funcdef();
+            continue;
+        }
+
+        return parse_exprs();
+    }
 }
 
 int main(int argc, char **argv)

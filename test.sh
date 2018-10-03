@@ -29,5 +29,8 @@ runtest "1+2*3" 7
 runtest "1*2+3*4" 14
 runtest "5/2+99/3" 35
 runtest "P(1);10+2;3" 3
+runtest "F{1}F()" 1
+runtest "F{5/2+99/3-3*4}F()" 23
+runtest "F{5/2+99/3-3*4;100-24}F()" 76
 
 echo "ok"
