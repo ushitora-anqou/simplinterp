@@ -21,7 +21,12 @@ runtest "23+42" 65
 runtest "1+2+4" 7
 runtest "1+2+4+10" 17
 runtest "1+2-3+5" 5
-#runtest "1*2+3" 5
-#runtest "13/3+4" 8
+runtest "2*3" 6
+runtest "10/3" 3
+runtest "1*2+3" 5
+runtest "13/3+4" 8
+runtest "1+2*3" 7
+runtest "1*2+3*4" 14
+runtest "5/2+99/3" 35
 
 echo "ok"

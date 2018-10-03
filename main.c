@@ -13,52 +13,45 @@ int parse_integer()
     return ival;
 }
 
-int parse_add()
+int parse_mul()
 {
     int ival = parse_integer();
     while (*p != '\0') {
         switch (*p) {
-            case '+':
-                p++;
-                ival += parse_integer();
-                break;
-            case '-':
-                p++;
-                ival -= parse_integer();
-                break;
-            default:
-                goto end;
-        }
-    }
-end:
-    return ival;
-}
-
-int eval()
-{
-    return parse_add();
-    /*
-    int ival = parse_integer();
-    while (*p != '\0') {
-        switch (*p++) {
-            case '+':
-                ival += parse_integer();
-                break;
-            case '-':
-                ival -= parse_integer();
-                break;
             case '*':
+                p++;
                 ival *= parse_integer();
-                break;
+                continue;
             case '/':
+                p++;
                 ival /= parse_integer();
-                break;
+                continue;
         }
+        break;
     }
-
     return ival;
-    */
 }
+
+int parse_add()
+{
+    int ival = parse_mul();
+    while (*p != '\0') {
+        switch (*p) {
+            case '+':
+                p++;
+                ival += parse_mul();
+                continue;
+            case '-':
+                p++;
+                ival -= parse_mul();
+                continue;
+        }
+        break;
+    }
+    return ival;
+}
+
+int eval() { return parse_add(); }
 
 int main(int argc, char **argv)
 {
