@@ -16,8 +16,21 @@ int parse_integer()
 int eval()
 {
     int ival = parse_integer();
-    while (*p++ == '+') {
-        ival += parse_integer();
+    while (*p != '\0') {
+        switch (*p++) {
+            case '+':
+                ival += parse_integer();
+                break;
+            case '-':
+                ival -= parse_integer();
+                break;
+            case '*':
+                ival *= parse_integer();
+                break;
+            case '/':
+                ival /= parse_integer();
+                break;
+        }
     }
 
     return ival;
