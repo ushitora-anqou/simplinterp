@@ -28,5 +28,6 @@ runtest "13/3+4" 8
 runtest "1+2*3" 7
 runtest "1*2+3*4" 14
 runtest "5/2+99/3" 35
+runtest "P(1)" 0
 
 echo "ok"

@@ -1,7 +1,21 @@
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static char *p;
+
+_Noreturn void error(char *msg)
+{
+    fprintf(stderr, "%s\n", msg);
+    exit(1);
+}
+
+void expect(char ch)
+{
+    if (*p++ != ch) error("unexpected char");
+}
+
+int parse_add();
 
 int parse_integer()
 {
@@ -13,18 +27,32 @@ int parse_integer()
     return ival;
 }
 
+int parse_funccall()
+{
+    if (*p == 'P') {
+        p++;
+        expect('(');
+        int ival = parse_add();
+        expect(')');
+        printf("%d\n", ival);
+        return 0;
+    }
+
+    return parse_integer();
+}
+
 int parse_mul()
 {
-    int ival = parse_integer();
+    int ival = parse_funccall();
     while (*p != '\0') {
         switch (*p) {
             case '*':
                 p++;
-                ival *= parse_integer();
+                ival *= parse_funccall();
                 continue;
             case '/':
                 p++;
-                ival /= parse_integer();
+                ival /= parse_funccall();
                 continue;
         }
         break;
