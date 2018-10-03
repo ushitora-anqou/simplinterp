@@ -79,7 +79,15 @@ int parse_add()
     return ival;
 }
 
-int eval() { return parse_add(); }
+int eval()
+{
+    int ival = parse_add();
+    while (*p == ';') {
+        p++;
+        ival = parse_add();
+    }
+    return ival;
+}
 
 int main(int argc, char **argv)
 {
